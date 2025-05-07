@@ -1,0 +1,28 @@
+{
+  "name": "solochain-template",
+  "version": "1.0.0",
+  "description": "This is a Substrate-based blockchain that demonstrates storing and retrieving usernames via custom JSON-RPC methods in a 2-node environment.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jproyo/solochain-kv-store.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jproyo/solochain-kv-store/issues"
+  },
+  "homepage": "https://github.com/jproyo/solochain-kv-store#readme",
+  "dependencies": {
+    "@polkadot/api": "^15.9.3",
+    "@polkadot/util-crypto": "^13.4.4"
+  }
+}

@@ -26,9 +26,11 @@ echo "Starting Node A (Validator)..."
   --chain local \
   --alice \
   --port 30333 \
-  --rpc-port 9933 \
+  --rpc-port 9944 \
   --validator \
   --rpc-cors all \
+  --rpc-external \
+  --rpc-methods=unsafe \
   --unsafe-rpc-external \
   --name "Node A" \
   --node-key-file /tmp/node01/node-key \
@@ -50,10 +52,12 @@ echo "Starting Node B (Full Node)..."
   --chain local \
   --bob \
   --port 30334 \
-  --rpc-port 9934 \
+  --rpc-port 9945 \
   --bootnodes "/ip4/127.0.0.1/tcp/30333/p2p/$(./target/release/solochain-template-node key inspect-node-key --file /tmp/node01/node-key)" \
   --rpc-cors all \
   --rpc-external \
+  --rpc-methods=unsafe \
+  --unsafe-rpc-external \
   --name "Node B" \
   --node-key-file /tmp/node02/node-key \
   --telemetry-url "wss://telemetry.polkadot.io/submit/ 0" \
@@ -66,11 +70,11 @@ echo "Starting Node B (Full Node)..."
 echo "Nodes started successfully!"
 echo "Node A:"
 echo "  WebSocket: ws://localhost:9944"
-echo "  RPC: http://localhost:9933"
+echo "  RPC: http://localhost:9944"
 echo "  Prometheus: http://localhost:9615"
 echo "Node B:"
 echo "  WebSocket: ws://localhost:9945"
-echo "  RPC: http://localhost:9934"
+echo "  RPC: http://localhost:9945"
 echo "  Prometheus: http://localhost:9616"
 
 # Keep the script running

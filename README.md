@@ -34,34 +34,10 @@ sh scripts/run_nodes.sh
 
 ## Using the JSON-RPC API
 
-### Setting a Username
+You need to have NPM installed because the test script is done with JavaScript in order to use Polkadot Lib
 
 ```bash
-# Using curl to set a username
-curl -H "Content-Type: application/json" -d '{
-  "id": 1,
-  "jsonrpc": "2.0",
-  "method": "usernameStorage_setUsername",
-  "params": ["0x1234...", "my_username"]
-}' http://localhost:9933
-```
-
-### Getting a Username
-
-```bash
-# Using curl to get a username
-curl -H "Content-Type: application/json" -d '{
-  "id": 1,
-  "jsonrpc": "2.0",
-  "method": "usernameStorage_getUsername",
-  "params": ["0x1234..."]
-}' http://localhost:9934
-```
-
-## Testing with Script
-
-```bash
-sh scripts/test_rpc.sh
+sh scripts/run_tests.sh
 ```
 
 ## Testing
