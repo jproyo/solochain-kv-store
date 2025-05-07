@@ -9542,6 +9542,7 @@ dependencies = [
  "jsonrpsee",
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc",
+ "pallet-username-storage",
  "sc-basic-authorship",
  "sc-cli",
  "sc-client-api",

@@ -10,7 +10,7 @@ echo "Setting username for $ACCOUNT to $USERNAME..."
 curl -H "Content-Type: application/json" -d '{
   "id": 1,
   "jsonrpc": "2.0",
-  "method": "usernameStorage_setUsername",
+  "method": "usernameStorage_set_username",
   "params": ["'$ACCOUNT'", "'$USERNAME'"]
 }' http://localhost:9933
 
@@ -21,6 +21,6 @@ echo -e "\nGetting username from Node B..."
 curl -H "Content-Type: application/json" -d '{
   "id": 1,
   "jsonrpc": "2.0",
-  "method": "usernameStorage_getUsername",
+  "method": "usernameStorage_get_username",
   "params": ["'$ACCOUNT'"]
 }' http://localhost:9934 

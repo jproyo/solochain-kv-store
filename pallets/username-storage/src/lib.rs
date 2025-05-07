@@ -99,9 +99,11 @@ pub mod pallet {
             Ok(())
         }
     }
+
     decl_runtime_apis! {
         pub trait UsernameStorageApi<AccountId: codec::Codec> {
             fn get_username(account_id: AccountId) -> Option<Vec<u8>>;
+            fn set_username(account_id: AccountId, username: Vec<u8>) -> Result<(), sp_runtime::DispatchError>;
         }
     }
 }

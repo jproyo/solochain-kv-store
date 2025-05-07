@@ -308,5 +308,12 @@ impl_runtime_apis! {
         fn get_username(account_id: AccountId) -> Option<Vec<u8>> {
             UsernameStorage::usernames(account_id).map(|v| v.to_vec())
         }
+
+        fn set_username(account_id: AccountId, username: Vec<u8>) -> Result<(), sp_runtime::DispatchError> {
+            UsernameStorage::set_username(
+                frame_system::RawOrigin::Signed(account_id).into(),
+                username,
+            )
+        }
     }
 }
