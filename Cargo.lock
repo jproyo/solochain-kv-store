@@ -2944,7 +2944,7 @@ dependencies = [
  "sp-runtime",
  "sp-staking",
  "sp-state-machine",
- "sp-std",
+ "sp-std 14.0.0",
  "sp-tracing",
  "sp-trie",
  "sp-weights",
@@ -6101,7 +6101,9 @@ dependencies = [
  "scale-info",
  "sp-api",
  "sp-core",
+ "sp-io",
  "sp-runtime",
+ "sp-std 11.0.0",
 ]
 
 [[package]]
@@ -6611,7 +6613,7 @@ dependencies = [
  "sp-keystore",
  "sp-runtime",
  "sp-staking",
- "sp-std",
+ "sp-std 14.0.0",
  "thiserror 1.0.69",
 ]
 
@@ -9862,7 +9864,7 @@ dependencies = [
  "sp-debug-derive",
  "sp-externalities",
  "sp-runtime-interface",
- "sp-std",
+ "sp-std 14.0.0",
  "sp-storage",
  "ss58-registry",
  "substrate-bip39",
@@ -10094,7 +10096,7 @@ dependencies = [
  "sp-arithmetic",
  "sp-core",
  "sp-io",
- "sp-std",
+ "sp-std 14.0.0",
  "sp-trie",
  "sp-weights",
  "tracing",
@@ -10114,7 +10116,7 @@ dependencies = [
  "primitive-types",
  "sp-externalities",
  "sp-runtime-interface-proc-macro",
- "sp-std",
+ "sp-std 14.0.0",
  "sp-storage",
  "sp-tracing",
  "sp-wasm-interface",
@@ -10209,6 +10211,12 @@ dependencies = [
  "thiserror 1.0.69",
  "x25519-dalek",
 ]
+
+[[package]]
+name = "sp-std"
+version = "11.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8c91d32e165d08a14098ce5ec923eaec59d1d0583758a18a770beec1b780b0d0"
 
 [[package]]
 name = "sp-std"
@@ -10315,7 +10323,7 @@ dependencies = [
  "serde",
  "sp-crypto-hashing-proc-macro",
  "sp-runtime",
- "sp-std",
+ "sp-std 14.0.0",
  "sp-version-proc-macro",
  "thiserror 1.0.69",
 ]

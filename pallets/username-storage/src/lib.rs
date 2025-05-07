@@ -4,9 +4,6 @@ pub use pallet::*;
 pub use pallet_username_storage_rpc as rpc;
 pub use pallet_username_storage_runtime_api as runtime_api;
 
-#[cfg(test)]
-mod tests;
-
 #[frame_support::pallet]
 pub mod pallet {
     use super::*;
@@ -98,5 +95,128 @@ mod benchmarking {
             #[extrinsic_call]
             set_username(RawOrigin::Signed(caller), username);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use frame_support::{
+        assert_noop, assert_ok, parameter_types,
+        traits::{ConstU32, Everything},
+    };
+    use sp_core::H256;
+    use sp_runtime::{
+        traits::{BlakeTwo256, IdentityLookup},
+        BuildStorage,
+    };
+    use sp_std::convert::TryInto;
+
+    type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
+    type Block = frame_system::mocking::MockBlock<Test>;
+
+    frame_support::construct_runtime!(
+        pub enum Test where
+            Block = Block,
+            NodeBlock = Block,
+            UncheckedExtrinsic = UncheckedExtrinsic
+        {
+            System: frame_system,
+            UsernameStorage: crate::pallet,
+        }
+    );
+
+    parameter_types! {
+        pub const BlockHashCount: u64 = 250;
+        pub const SS58Prefix: u8 = 42;
+    }
+
+    impl frame_system::Config for Test {
+        type BaseCallFilter = Everything;
+        type BlockWeights = ();
+        type BlockLength = ();
+        type RuntimeOrigin = RuntimeOrigin;
+        type RuntimeCall = RuntimeCall;
+        type Nonce = u64;
+        type Block = Block;
+        type Hash = H256;
+        type Hashing = BlakeTwo256;
+        type AccountId = u64;
+        type Lookup = IdentityLookup<Self::AccountId>;
+        type RuntimeEvent = RuntimeEvent;
+        type BlockHashCount = BlockHashCount;
+        type DbWeight = ();
+        type Version = ();
+        type PalletInfo = PalletInfo;
+        type AccountData = ();
+        type OnNewAccount = ();
+        type OnKilledAccount = ();
+        type SystemWeightInfo = ();
+        type SS58Prefix = SS58Prefix;
+        type OnSetCode = ();
+        type MaxConsumers = ConstU32<16>;
+        type RuntimeTask = ();
+        type ExtensionsWeightInfo = ();
+        type SingleBlockMigrations = ();
+        type MultiBlockMigrator = ();
+        type PreInherents = ();
+        type PostInherents = ();
+        type PostTransactions = ();
+    }
+
+    impl Config for Test {
+        type RuntimeEvent = RuntimeEvent;
+    }
+
+    fn new_test_ext() -> sp_io::TestExternalities {
+        let t = frame_system::GenesisConfig::<Test>::default()
+            .build_storage()
+            .unwrap();
+        let mut ext = sp_io::TestExternalities::new(t);
+        ext.execute_with(|| frame_system::Pallet::<Test>::set_block_number(1));
+        ext
+    }
+
+    #[test]
+    fn test_set_username() {
+        new_test_ext().execute_with(|| {
+            let account_id = 1;
+            let username = b"test_user".to_vec();
+
+            assert_ok!(UsernameStorage::set_username(
+                RuntimeOrigin::signed(account_id),
+                username.clone()
+            ));
+            assert_eq!(
+                UsernameStorage::usernames(account_id),
+                Some(username.try_into().unwrap())
+            );
+        });
+    }
+
+    #[test]
+    fn test_set_username_empty() {
+        new_test_ext().execute_with(|| {
+            let account_id = 1;
+            let username = b"".to_vec();
+
+            assert_noop!(
+                UsernameStorage::set_username(RuntimeOrigin::signed(account_id), username),
+                Error::<Test>::UsernameEmpty
+            );
+        });
+    }
+
+    #[test]
+    fn test_set_username_too_long() {
+        new_test_ext().execute_with(|| {
+            let account_id = 1;
+            let username = vec![0; 33]; // 33 bytes is too long
+
+            assert_noop!(
+                UsernameStorage::set_username(RuntimeOrigin::signed(account_id), username),
+                Error::<Test>::UsernameTooLong
+            );
+        });
     }
 }

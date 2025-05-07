@@ -17,9 +17,11 @@ scale-info = { workspace = true, default-features = false, features = [
 sp-runtime = { workspace = true, default-features = false }
 sp-core = { workspace = true, default-features = false }
 sp-api = { workspace = true, default-features = false }
+sp-io = { workspace = true, default-features = false }
 pallet-username-storage-runtime-api = { path = "./runtime-api", default-features = false }
 pallet-username-storage-rpc = { path = "./rpc", default-features = false }
 frame-benchmarking = { workspace = true, default-features = false, optional = true }
+sp-std = { version = "11.0.0", default-features = false }
 
 [features]
 default = ["std"]
@@ -31,8 +33,10 @@ std = [
     "sp-runtime/std",
     "sp-core/std",
     "sp-api/std",
+    "sp-io/std",
     "pallet-username-storage-runtime-api/std",
     "pallet-username-storage-rpc/std",
+    "sp-std/std",
 ]
 runtime-benchmarks = [
     "frame-benchmarking",
