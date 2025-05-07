@@ -13,19 +13,21 @@ This is a Substrate-based blockchain that demonstrates storing and retrieving us
 
 The project consists of several key components:
 
-1. **Pallet Username Storage** (`pallets/username-storage/`)
+1. **Pallet Username Storage** 
+   - Location [pallets/username-storage/](./pallets/username-storage) 
    - Implements the core storage functionality for usernames
    - Provides dispatchable calls for setting and getting usernames
    - Manages storage items and events
 
-2. **Username Storage RPC** (`rpc/username-storage/`)
+2. **Username Storage RPC** 
+   - Location [rpc/username-storage/](./rpc/username-storage-rpc) 
    - Implements custom JSON-RPC methods
    - Provides `username_getUsername` and `username_setUsername` endpoints
    - Handles RPC requests and responses
 
 3. **Runtime Integration**
-   - The pallet is integrated into the runtime (`runtime/src/lib.rs`)
-   - RPC extensions are configured in the node (`node/src/rpc.rs`)
+   - The pallet is integrated into the runtime [runtime/src/lib.rs](runtime/src/lib.rs)
+   - RPC extensions are configured in the node [node/src/rpc.rs](node/src/rpc.rs)
 
 4. **Testing Scripts**
    - JavaScript-based test suite using Polkadot.js API
@@ -43,12 +45,11 @@ The project consists of several key components:
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/jproyo/solochain-kv-store.git
 cd solochain-template
 
 # Build the project
 cargo build --release
-```
 
 ## Running the Nodes
 
