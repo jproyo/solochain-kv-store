@@ -217,22 +217,20 @@ mod tests {
             .build_storage()
             .unwrap();
         let mut ext = sp_io::TestExternalities::new(t);
-        ext.execute_with(|| frame_system::Pallet::<Test>::set_block_number(1));
+        ext.execute_with(|| System::set_block_number(1));
         ext
     }
 
     #[test]
     fn test_set_username() {
         new_test_ext().execute_with(|| {
-            let account_id = 1;
-            let username = b"test_user".to_vec();
-
-            assert_ok!(UsernameStorage::set_username(
-                RuntimeOrigin::signed(account_id),
+            let username = b"test_username".to_vec();
+            assert_ok!(Pallet::<Test>::set_username(
+                RuntimeOrigin::signed(1),
                 username.clone()
             ));
             assert_eq!(
-                UsernameStorage::usernames(account_id),
+                Usernames::<Test>::get(1),
                 Some(username.try_into().unwrap())
             );
         });
@@ -241,11 +239,8 @@ mod tests {
     #[test]
     fn test_set_username_empty() {
         new_test_ext().execute_with(|| {
-            let account_id = 1;
-            let username = b"".to_vec();
-
             assert_noop!(
-                UsernameStorage::set_username(RuntimeOrigin::signed(account_id), username),
+                Pallet::<Test>::set_username(RuntimeOrigin::signed(1), Vec::new()),
                 Error::<Test>::UsernameEmpty
             );
         });
@@ -254,11 +249,9 @@ mod tests {
     #[test]
     fn test_set_username_too_long() {
         new_test_ext().execute_with(|| {
-            let account_id = 1;
             let username = vec![0; 33]; // 33 bytes is too long
-
             assert_noop!(
-                UsernameStorage::set_username(RuntimeOrigin::signed(account_id), username),
+                Pallet::<Test>::set_username(RuntimeOrigin::signed(1), username),
                 Error::<Test>::UsernameTooLong
             );
         });

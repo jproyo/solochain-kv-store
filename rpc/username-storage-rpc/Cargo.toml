@@ -1,0 +1,32 @@
+[package]
+name = "username-storage-rpc"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "RPC implementation for the username-storage pallet"
+
+[dependencies]
+jsonrpsee = { workspace = true, features = ["server", "macros"] }
+codec = { package = "parity-scale-codec", workspace = true, default-features = false, features = [
+    "derive",
+] }
+sp-core = { workspace = true, default-features = false }
+sp-rpc = { version = "24.0.0", default-features = false }
+sp-runtime = { workspace = true, default-features = false }
+sp-blockchain = { workspace = true, default-features = false }
+sp-api = { workspace = true, default-features = false }
+pallet-username-storage = { path = "../../pallets/username-storage", default-features = false }
+solochain-template-runtime = { path = "../../runtime", default-features = false }
+sp-std = { version = "14.0.0", default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    "codec/std",
+    "sp-core/std",
+    "sp-runtime/std",
+    "sp-api/std",
+    "pallet-username-storage/std",
+    "solochain-template-runtime/std",
+    "sp-std/std",
+]
