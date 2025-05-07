@@ -306,7 +306,7 @@ impl_runtime_apis! {
 
     impl pallet_username_storage::UsernameStorageApi<Block, AccountId> for Runtime {
         fn get_username(account_id: AccountId) -> Option<Vec<u8>> {
-            UsernameStorage::usernames(account_id).map(|v| v.to_vec())
+            UsernameStorage::usernames(account_id).map(|v| v.into_inner().to_vec())
         }
 
         fn set_username(account_id: AccountId, username: Vec<u8>) -> Result<(), sp_runtime::DispatchError> {

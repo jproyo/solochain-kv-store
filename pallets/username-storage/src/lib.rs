@@ -49,6 +49,15 @@ pub mod pallet {
             /// The new username
             username: BoundedVec<u8, T::MaxUsernameLength>,
         },
+        /// Username was retrieved
+        UsernameRetrieved {
+            /// The account that requested the username
+            who: T::AccountId,
+            /// The account whose username was requested
+            target: T::AccountId,
+            /// The username that was retrieved
+            username: BoundedVec<u8, T::MaxUsernameLength>,
+        },
     }
 
     #[pallet::error]
