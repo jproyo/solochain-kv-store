@@ -112,19 +112,30 @@ mod tests {
     };
     use sp_std::convert::TryInto;
 
-    type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
     type Block = frame_system::mocking::MockBlock<Test>;
 
-    frame_support::construct_runtime!(
-        pub enum Test where
-            Block = Block,
-            NodeBlock = Block,
-            UncheckedExtrinsic = UncheckedExtrinsic
-        {
-            System: frame_system,
-            UsernameStorage: crate::pallet,
-        }
-    );
+    #[frame_support::runtime]
+    mod runtime {
+        #[runtime::runtime]
+        #[runtime::derive(
+            RuntimeCall,
+            RuntimeEvent,
+            RuntimeError,
+            RuntimeOrigin,
+            RuntimeFreezeReason,
+            RuntimeHoldReason,
+            RuntimeSlashReason,
+            RuntimeLockId,
+            RuntimeTask
+        )]
+        pub struct Test;
+
+        #[runtime::pallet_index(0)]
+        pub type System = frame_system;
+
+        #[runtime::pallet_index(1)]
+        pub type UsernameStorage = crate::pallet;
+    }
 
     parameter_types! {
         pub const BlockHashCount: u64 = 250;
@@ -155,7 +166,7 @@ mod tests {
         type SS58Prefix = SS58Prefix;
         type OnSetCode = ();
         type MaxConsumers = ConstU32<16>;
-        type RuntimeTask = ();
+        type RuntimeTask = RuntimeTask;
         type ExtensionsWeightInfo = ();
         type SingleBlockMigrations = ();
         type MultiBlockMigrator = ();
