@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cargo build --release
+
 # Kill any existing nodes
 pkill -f solochain-template-node
 
@@ -13,12 +15,10 @@ mkdir -p /tmp/node02
   --chain local \
   --alice \
   --port 30333 \
-  --ws-port 9944 \
   --rpc-port 9933 \
   --validator \
   --rpc-cors all \
   --rpc-external \
-  --ws-external \
   --name "Node A" &
 
 # Wait for Node A to start
@@ -33,12 +33,10 @@ NODE_A_PEER_ID=$(./target/release/solochain-template-node key inspect-node-key -
   --chain local \
   --bob \
   --port 30334 \
-  --ws-port 9945 \
   --rpc-port 9934 \
   --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/$NODE_A_PEER_ID \
   --rpc-cors all \
   --rpc-external \
-  --ws-external \
   --name "Node B" &
 
 echo "Nodes started!"

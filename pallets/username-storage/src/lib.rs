@@ -7,6 +7,7 @@ pub mod pallet {
     use super::*;
     use frame_support::{pallet_prelude::*, traits::Get};
     use frame_system::pallet_prelude::*;
+    use sp_api::decl_runtime_apis;
     use sp_std::{convert::TryInto, vec::Vec};
 
     #[pallet::config]
@@ -96,6 +97,11 @@ pub mod pallet {
             }
 
             Ok(())
+        }
+    }
+    decl_runtime_apis! {
+        pub trait UsernameStorageApi<AccountId: codec::Codec> {
+            fn get_username(account_id: AccountId) -> Option<Vec<u8>>;
         }
     }
 }

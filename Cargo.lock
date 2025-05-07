@@ -6095,8 +6095,6 @@ dependencies = [
  "frame-benchmarking",
  "frame-support",
  "frame-system",
- "pallet-username-storage-rpc",
- "pallet-username-storage-runtime-api",
  "parity-scale-codec",
  "scale-info",
  "sp-api",
@@ -6104,28 +6102,6 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "sp-std 11.0.0",
-]
-
-[[package]]
-name = "pallet-username-storage-rpc"
-version = "0.1.0"
-dependencies = [
- "jsonrpsee",
- "pallet-username-storage-runtime-api",
- "parity-scale-codec",
- "sp-api",
- "sp-blockchain",
- "sp-runtime",
-]
-
-[[package]]
-name = "pallet-username-storage-runtime-api"
-version = "0.1.0"
-dependencies = [
- "parity-scale-codec",
- "sp-api",
- "sp-core",
- "sp-runtime",
 ]
 
 [[package]]
@@ -9615,6 +9591,7 @@ dependencies = [
  "pallet-timestamp",
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc-runtime-api",
+ "pallet-username-storage",
  "parity-scale-codec",
  "scale-info",
  "serde_json",

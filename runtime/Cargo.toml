@@ -30,8 +30,11 @@ pallet-template.workspace = true
 pallet-timestamp.workspace = true
 pallet-transaction-payment-rpc-runtime-api.workspace = true
 pallet-transaction-payment.workspace = true
+pallet-username-storage = { path = "../pallets/username-storage", default-features = false }
 scale-info = { features = ["derive", "serde"], workspace = true }
-serde_json = { workspace = true, default-features = false, features = ["alloc"] }
+serde_json = { workspace = true, default-features = false, features = [
+	"alloc",
+] }
 sp-api.workspace = true
 sp-block-builder.workspace = true
 sp-consensus-aura = { features = ["serde"], workspace = true }
@@ -70,6 +73,7 @@ std = [
 	"pallet-timestamp/std",
 	"pallet-transaction-payment-rpc-runtime-api/std",
 	"pallet-transaction-payment/std",
+	"pallet-username-storage/std",
 	"scale-info/std",
 	"serde_json/std",
 	"sp-api/std",
