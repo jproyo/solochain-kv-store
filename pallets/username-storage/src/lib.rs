@@ -1,19 +1,21 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub use pallet::*;
-pub use pallet_username_storage_rpc as rpc;
-pub use pallet_username_storage_runtime_api as runtime_api;
 
 #[frame_support::pallet]
 pub mod pallet {
     use super::*;
-    use frame_support::pallet_prelude::*;
+    use frame_support::{pallet_prelude::*, traits::Get};
     use frame_system::pallet_prelude::*;
+    use sp_std::{convert::TryInto, vec::Vec};
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
         /// The overarching event type.
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+        /// Maximum length of username
+        #[pallet::constant]
+        type MaxUsernameLength: Get<u32>;
     }
 
     #[pallet::pallet]
@@ -21,16 +23,30 @@ pub mod pallet {
 
     #[pallet::storage]
     #[pallet::getter(fn usernames)]
-    pub type Usernames<T: Config> =
-        StorageMap<_, Blake2_128Concat, T::AccountId, BoundedVec<u8, ConstU32<32>>, OptionQuery>;
+    pub type Usernames<T: Config> = StorageMap<
+        _,
+        Blake2_128Concat,
+        T::AccountId,
+        BoundedVec<u8, T::MaxUsernameLength>,
+        OptionQuery,
+    >;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         /// Username was set for an account
         UsernameSet {
+            /// The account that set the username
             who: T::AccountId,
-            username: BoundedVec<u8, ConstU32<32>>,
+            /// The username that was set
+            username: BoundedVec<u8, T::MaxUsernameLength>,
+        },
+        /// Username was updated for an account
+        UsernameUpdated {
+            /// The account that updated the username
+            who: T::AccountId,
+            /// The new username
+            username: BoundedVec<u8, T::MaxUsernameLength>,
         },
     }
 
@@ -49,30 +65,37 @@ pub mod pallet {
         pub fn set_username(origin: OriginFor<T>, username: Vec<u8>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            // Ensure username is not empty
+            // Validate username
             ensure!(!username.is_empty(), Error::<T>::UsernameEmpty);
+            ensure!(
+                username.len() <= T::MaxUsernameLength::get() as usize,
+                Error::<T>::UsernameTooLong
+            );
 
-            // Convert to bounded vec and ensure it's not too long
             let bounded_username: BoundedVec<_, _> = username
                 .try_into()
                 .map_err(|_| Error::<T>::UsernameTooLong)?;
 
-            // Store the username
+            // Check if username already exists
+            let exists = Usernames::<T>::contains_key(&who);
+
+            // Update storage
             Usernames::<T>::insert(&who, bounded_username.clone());
 
-            // Emit the event
-            Self::deposit_event(Event::UsernameSet {
-                who,
-                username: bounded_username,
-            });
+            // Emit appropriate event
+            if exists {
+                Self::deposit_event(Event::UsernameUpdated {
+                    who,
+                    username: bounded_username,
+                });
+            } else {
+                Self::deposit_event(Event::UsernameSet {
+                    who,
+                    username: bounded_username,
+                });
+            }
 
             Ok(())
-        }
-    }
-
-    impl<T: Config> Pallet<T> {
-        pub fn get_username(account_id: T::AccountId) -> Option<Vec<u8>> {
-            Self::usernames(account_id).map(|v| v.to_vec())
         }
     }
 }
@@ -140,6 +163,7 @@ mod tests {
     parameter_types! {
         pub const BlockHashCount: u64 = 250;
         pub const SS58Prefix: u8 = 42;
+        pub const MaxUsernameLength: u32 = 32;
     }
 
     impl frame_system::Config for Test {
@@ -177,6 +201,7 @@ mod tests {
 
     impl Config for Test {
         type RuntimeEvent = RuntimeEvent;
+        type MaxUsernameLength = MaxUsernameLength;
     }
 
     fn new_test_ext() -> sp_io::TestExternalities {
